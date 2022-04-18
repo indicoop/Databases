@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->integer('product_id');
+            $table->foreignId('product_id')->constrained();
             $table->integer('quantity');
             $table->text('destination_address');
             $table->integer('voucher_id');

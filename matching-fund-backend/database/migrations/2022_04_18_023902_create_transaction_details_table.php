@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('transaction_details', function (Blueprint $table) {
             $table->id();
-            $table->integer('transaction_id');
-            $table->integer('user_id');
-            $table->integer('courier_id');
-            $table->integer('cooperative_id');
+            $table->foreignId('transaction_id')->constrained();
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('courier_id')->constrained();
+            $table->foreignId('cooperative_id')->constrained();
             $table->float('total_pay');
-            $table->integer('payment_method_id');
+            $table->foreignId('payment_method_id')->constrained();
             $table->string('status')->default('pending');
             $table->float('shipping_fee')->nullable();
             $table->date('transaction_date');

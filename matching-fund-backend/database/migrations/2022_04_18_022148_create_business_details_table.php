@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('business_details', function (Blueprint $table) {
             $table->id();
-            $table->integer('cooperative_id');
-            $table->integer('business_id');
+            $table->foreignId('cooperative_id')->constrained();
+            $table->foreignId('business_id')->constrained();
             $table->timestamps();
         });
     }

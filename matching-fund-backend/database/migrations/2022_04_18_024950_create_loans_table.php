@@ -22,7 +22,7 @@ return new class extends Migration
             $table->float('installment_interest');
             $table->float('total_installment');
             $table->integer('installment_remaining');
-            $table->integer('loan_type_id');
+            $table->unsignedBigInteger('loan_type_id');
             $table->timestamps();
             $table->foreign('loan_type_id')->references('id')->on('loan_types');
         });

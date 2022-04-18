@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->integer('detail_business_id');
-            $table->integer('product_category_id');
+            $table->foreignId('detail_business_id')->constrained('business_details');
+            $table->foreignId('product_category_id')->constrained();
             $table->string('name');
             $table->float('price');
             $table->integer('stock');
