@@ -24,6 +24,7 @@ return new class extends Migration
             $table->integer('installment_remaining');
             $table->integer('loan_type_id');
             $table->timestamps();
+            $table->foreign('loan_type_id')->references('id')->on('loan_types');
         });
     }
 
