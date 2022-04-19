@@ -27,6 +27,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'credit_card_number',
+        'phone_number',
+        'role_id',
+        'gender',
+        'address',
     ];
 
     /**
@@ -58,4 +63,19 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+
+    // RELATIONS
+
+    // hasOne - Role
+    public function role()
+    {
+        return $this->hasOne(Role::class, 'id', 'role_id');
+    }
+
+    // hasMany - Loan
+    public function loans()
+    {
+        return $this->hasMany(Loan::class, 'user_id', 'id');
+    }
 }
