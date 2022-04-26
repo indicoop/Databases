@@ -15,9 +15,11 @@ return new class extends Migration
     {
         Schema::create('vouchers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('cooperative_id')->constrained();
+            $table->integer('cooperative_id');
             $table->string('code');
             $table->float('discount');
+            $table->date('effective_date');
+            $table->date('expired_date');
             $table->timestamps();
         });
     }

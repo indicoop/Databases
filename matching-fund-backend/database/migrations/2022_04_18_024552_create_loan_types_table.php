@@ -20,9 +20,7 @@ return new class extends Migration
             $table->float('interest');
             $table->float('fine');
             $table->timestamps();
-    
         });
-
     }
 
     /**

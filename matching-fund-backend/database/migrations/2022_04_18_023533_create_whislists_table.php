@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('whislists', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained();
-            $table->foreignId('user_id')->constrained();
+            $table->integer('product_id');
+            $table->integer('user_id');
             $table->timestamps();
         });
     }

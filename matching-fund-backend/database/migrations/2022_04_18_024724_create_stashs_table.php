@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('stashs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
+            $table->integer('user_id');
             $table->float('beginning_balance');
             $table->float('ending_balance');
             $table->date('stash_date');

@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('dues', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
+            $table->integer('user_id');
             $table->float('total_pay');
             $table->float('dues_amount');
-            $table->foreignId('dues_type_id')->constrained();
+            $table->integer('dues_type_id');
             $table->timestamps();
         });
     }

@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::create('cooperatives', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
             $table->string('name');
             $table->string('registration_number');
             $table->boolean('status')->default(true);

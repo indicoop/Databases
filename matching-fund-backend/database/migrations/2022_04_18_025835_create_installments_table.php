@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('installments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('loan_id')->constrained();
+            $table->integer('loan_id');
             $table->string('installment_type');
             $table->integer('installment_number');
             $table->date('pay_date');
