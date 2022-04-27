@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Cooperative;
+use App\Models\Loan;
+use App\Models\LoanType;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -20,5 +22,7 @@ class DatabaseSeeder extends Seeder
         Role::factory(4)->create();
         Cooperative::factory(40)->create();
         User::factory(40)->create();
+        LoanType::factory(10)->create();
+        Loan::factory(100)->create();
     }
 }

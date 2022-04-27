@@ -18,7 +18,7 @@ class CooperativeController extends Controller
             if ($user->role->id == 1) {
                 $cooperatives = Cooperative::all();
                 return ResponseFormatter::success($cooperatives);
-            } else if($user->role->id == 2) {
+            } else if ($user->role->id == 2) {
                 // if role is 2 (admin), fetch cooperatives where user is cooperative chairman
                 $cooperatives = $user->with('cooperative')->where([
                     ['role_id', '=', 2],
@@ -36,7 +36,7 @@ class CooperativeController extends Controller
                     'cooperative' => $cooperatives,
                     'cooperative_detail' => $cooperative_detail
                 ]);
-            } else if($user->role->id == 3) {
+            } else if ($user->role->id == 3) {
                 // if role is 3 (member), fetch cooperatives where user is cooperative member
                 $cooperatives = $user->with('cooperative')->where([
                     ['role_id', '=', 3],
@@ -49,26 +49,37 @@ class CooperativeController extends Controller
         }
     }
 
-    public function fetchActiveCooperatives()
+    public function fetchActiveCooperatives($id)
     {
-        try {
-            $cooperatives = Cooperative::with([
+        if ($id) {
+            $cooperative = Cooperative::with([
                 'users',
                 'businessDetails',
                 'vouchers',
                 'transactionDetails',
-            ])->where([
-                ['status', '=', true],
-                ['is_verified', '=', true],
-            ])->get();
+            ])->where('id', $id)->first();
+            return ResponseFormatter::success($cooperative);
+        } else {
+            try {
+                $cooperatives = Cooperative::with([
+                    'users',
+                    'businessDetails',
+                    'vouchers',
+                    'transactionDetails',
+                ])->where([
+                    ['status', '=', true],
+                    ['is_verified', '=', true],
+                ])->get();
 
-            return ResponseFormatter::success($cooperatives);
-        } catch (Exception $th) {
-            return ResponseFormatter::error($th->getMessage());
+                return ResponseFormatter::success($cooperatives);
+            } catch (Exception $th) {
+                return ResponseFormatter::error($th->getMessage());
+            }
         }
     }
 
-    public function update(Request $request) {
+    public function update(Request $request)
+    {
         try {
             $request->validate([
                 'id' => 'required|integer',

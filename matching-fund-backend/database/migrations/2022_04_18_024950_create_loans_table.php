@@ -17,10 +17,10 @@ return new class extends Migration
             $table->id();
             $table->integer('user_id');
             $table->date('loan_date');
-            $table->float('amount');
-            $table->float('installment_principal');
-            $table->float('installment_interest');
-            $table->float('total_installment');
+            $table->integer('amount');
+            $table->integer('installment_principal');
+            $table->integer('installment_interest');
+            $table->integer('total_installment');
             $table->integer('installment_remaining');
             $table->integer('loan_type_id');
             $table->timestamps();
