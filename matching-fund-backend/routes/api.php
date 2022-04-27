@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\CooperativeController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,6 +18,15 @@ use Illuminate\Support\Facades\Route;
 Route::post('register', [UserController::class, 'register']);
 Route::post('login', [UserController::class, 'login']);
 
+// cooperatives public
+Route::get('all-coperatives', [CooperativeController::class, 'fetchActiveCooperatives']);
+
 Route::middleware('auth:sanctum')->group(function() {
     Route::get('user', [UserController::class, 'fetch']);
+    Route::post('logout', [UserController::class, 'logout']);
+    Route::post('update', [UserController::class, 'update']);
+
+    // cooperative
+    Route::get('cooperatives', [CooperativeController::class, 'fetch']);
+    Route::post('update-cooperative', [CooperativeController::class, 'update']);
 });

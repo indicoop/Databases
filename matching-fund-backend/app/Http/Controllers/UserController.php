@@ -51,9 +51,9 @@ class UserController extends Controller
         } catch (Exception $e) {
             return ResponseFormatter::error($e->getMessage());
         }
-    }   
+    }
 
-    public function login(Request $request) 
+    public function login(Request $request)
     {
         try {
             $request->validate([
@@ -63,7 +63,7 @@ class UserController extends Controller
 
             $credentials = request(['email', 'password']);
 
-            if(!Auth::attempt($credentials)) {
+            if (!Auth::attempt($credentials)) {
                 return ResponseFormatter::error('Unauthorized');
             }
 
@@ -78,7 +78,6 @@ class UserController extends Controller
                 'token-type' => 'Bearer',
                 'token' => $user->createToken('authToken')->plainTextToken,
             ]);
-
         } catch (Exception $th) {
             return ResponseFormatter::error($th->getMessage());
         }
@@ -97,6 +96,52 @@ class UserController extends Controller
             ]);
         } catch (Exception $th) {
             return ResponseFormatter::error($th->getMessage());
+        }
+    }
+
+    public function logout(Request $request)
+    {
+        try {
+            $request->user()->tokens()->delete();
+            return ResponseFormatter::success([
+                'code' => 200,
+                'message' => 'Logout Successfully',
+            ]);
+        } catch (Exception $th) {
+            return ResponseFormatter::error($th->getMessage());
+        }
+    }
+
+    public function update(Request $request)
+    {
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'cooperative_id' => 'nullable|integer',
+                'credit_card_number' => 'nullable|string',
+                'phone_number' => 'nullable|string',
+                'address' => 'required|string',
+                'profile_photo_path' => 'nullable|string',
+            ]);
+
+            $user = User::find($request->user()->id);
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->cooperative_id = $request->cooperative_id;
+            $user->credit_card_number = $request->credit_card_number;
+            $user->phone_number = $request->phone_number;
+            $user->address = $request->address;
+            $user->profile_photo_path = $request->profile_photo_path;
+            $user->save();
+
+            return ResponseFormatter::success([
+                'code' => 200,
+                'user' => $user,
+            ]);
+
+        } catch (Exception $e) {
+            return ResponseFormatter::error($e->getMessage());
         }
     }
 }

@@ -27,10 +27,10 @@ class Cooperative extends Model
 
     // RELATIONSHIPS
 
-    // belongsTo (one to one) relationship with User
-    public function user()
+    // hasMany (one to many) relationship with users
+    public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasMany(User::class);
     }
 
     // hasMany (one to many) relationship with BusinessDetail
@@ -50,4 +50,6 @@ class Cooperative extends Model
     {
         return $this->hasMany(TransactionDetail::class);
     }
+
+    
 }
