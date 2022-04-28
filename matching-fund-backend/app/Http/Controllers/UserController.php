@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ResponseFormatter;
+use App\Models\Cooperative;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -142,6 +143,33 @@ class UserController extends Controller
 
         } catch (Exception $e) {
             return ResponseFormatter::error($e->getMessage());
+        }
+    }
+
+    public function updateVerificationCooperative(Request $request)
+    {
+        try {
+            $user = $request->user();
+            $request->validate([
+                'is_verified' => 'required|boolean',
+            ]);
+
+            // update cooperative verification
+            $cooperative = Cooperative::find($request->id);
+            $cooperative->is_verified = $request->is_verified;
+            $cooperative->save();
+
+            // update role_id of user
+            $user->role_id = 2;
+            $user->save();
+
+            return ResponseFormatter::success([
+                'code' => 200,
+                'user' => $user,
+                'cooperative' => $cooperative,
+            ], 'Cooperative Verification Updated & User Role Updated');
+        } catch (Exception $th) {
+            return ResponseFormatter::error($th->getMessage());
         }
     }
 }

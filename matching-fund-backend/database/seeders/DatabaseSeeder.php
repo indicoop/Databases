@@ -20,9 +20,9 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         Role::factory(4)->create();
-        Cooperative::factory(40)->create();
         User::factory(40)->create();
         LoanType::factory(10)->create();
         Loan::factory(100)->create();
+        Cooperative::factory(40)->create();
     }
 }

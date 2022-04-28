@@ -32,7 +32,7 @@ class UserFactory extends Factory
             'password' => password_hash('12345678', PASSWORD_DEFAULT), // password
             'remember_token' => Str::random(10),
             'role_id' => $this->faker->numberBetween(1, 4),
-            'cooperative_id' => $this->faker->numberBetween(1, Cooperative::count()),
+            'cooperative_id' => $this->faker->numberBetween(1, 40),
             'credit_card_number' => '1234567890123456',
             'phone_number' => '09123456789',
             'address' => '123 Fake Street, Fake City, Fake State, 12345',

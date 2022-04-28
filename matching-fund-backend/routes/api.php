@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\CooperativeController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\UserController;
@@ -24,16 +25,27 @@ Route::get('all-coperatives', [CooperativeController::class, 'fetchActiveCoopera
 Route::get('cooperative/{id}', [CooperativeController::class, 'fetchActiveCooperatives']);
 
 Route::middleware('auth:sanctum')->group(function() {
+    // users
     Route::get('user', [UserController::class, 'fetch']);
     Route::post('logout', [UserController::class, 'logout']);
     Route::post('update', [UserController::class, 'update']);
+    // update verification cooperative
+    Route::post('uvc', [UserController::class, 'updateVerificationCooperative']);
 
     // cooperative
     Route::get('cooperatives', [CooperativeController::class, 'fetch']);
-    Route::post('update-cooperative', [CooperativeController::class, 'update']);
+    Route::post('create-cooperative', [CooperativeController::class, 'create']);
+    Route::post('update-cooperative/{id}', [CooperativeController::class, 'update']);
+    Route::post('delete-cooperative', [CooperativeController::class, 'delete']);
+
+    // business
+    Route::post('create-business', [BusinessController::class, 'create']);
+    Route::post('update-business/{id}', [BusinessController::class, 'update']);
+
     // loans
     Route::get('loans', [LoanController::class, 'index']);
     Route::get('loan/{id}', [LoanController::class, 'fetch']);
-    Route::post('loan/create', [LoanController::class, 'store']);
-
+    Route::post('loan-create', [LoanController::class, 'store']);
+    Route::post('loan-update/{id}', [LoanController::class, 'update']);
+    Route::post('loan-delete/{id}', [LoanController::class, 'delete']);
 });

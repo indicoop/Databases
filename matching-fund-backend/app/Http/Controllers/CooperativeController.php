@@ -6,7 +6,6 @@ use App\Helpers\ResponseFormatter;
 use App\Models\Cooperative;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
 
 class CooperativeController extends Controller
 {
@@ -78,14 +77,65 @@ class CooperativeController extends Controller
         }
     }
 
-    public function update(Request $request)
+    public function create(Request $request)
+    {
+        $user = $request->user();
+        try {
+            //  if role is 2 (cooperative chairman)
+            if ($user->role_id == 4) {
+                $request->validate([
+                    'name' => 'required|string|max:255|unique:cooperatives,name',
+                    'status' => 'required|boolean',
+                    'effective_date' => 'required|date',
+                    'status_grade' => 'required|string|max:255',
+                    'date_of_establishment' => 'required|date',
+                    'address' => 'required|string|max:255',
+                    'email' => 'required|string|max:255|unique:cooperatives,email',
+                    'phone_number' => 'required|string|max:255',
+                    'form_of_cooperative' => 'required|string|max:255',
+                    'certificate' => 'required|string|max:255',
+                    'legal_entity_certificate' => 'required|string|max:255',
+                ]);
+                // check if cooperative chairman is already registered
+                $cooperative_chairman = Cooperative::where([
+                    ['user_id', '=', $user->id],
+                ])->first();
+                if ($cooperative_chairman) {
+                    return ResponseFormatter::error('You are already registered as a cooperative chairman');
+                } else {
+                    $cooperative = Cooperative::create([
+                        'user_id' => $user->id,
+                        'name' => $request->name,
+                        'registration_number' => $request->name . '-' . date('Y:m:d H:i:s'),
+                        'status' => $request->status,
+                        'effective_date' => $request->effective_date,
+                        'status_grade' => $request->status_grade,
+                        'date_of_establishment' => $request->date_of_establishment,
+                        'address' => $request->address,
+                        'email' => $request->email,
+                        'phone_number' => $request->phone_number,
+                        'form_of_cooperative' => $request->form_of_cooperative,
+                        'certificate' => $request->certificate,
+                        'legal_entity_certificate' => $request->legal_entity_certificate,
+                        'is_verified' => false,
+                    ]);
+                    return ResponseFormatter::success($cooperative, 'Cooperative created successfully');
+                }
+            }
+        } catch (Exception $th) {
+            return ResponseFormatter::error($th->getMessage(), 'Error creating cooperative');
+        }
+    }
+
+    public function update(Request $request, $id)
     {
         try {
+            $user = $request->user();
             $request->validate([
-                'id' => 'required|integer',
                 'name' => 'required|string',
                 'effective_date' => 'required|date',
-                'status_grade' => 'required|integer',
+                // 'registration_number' => 'required|string',
+                'status_grade' => 'required|string',
                 'date_of_establishment' => 'required|date',
                 'address' => 'required|string',
                 'email' => 'required|email',
@@ -95,8 +145,10 @@ class CooperativeController extends Controller
                 'legal_entity_certificate' => 'required|string',
             ]);
 
-            Cooperative::where('id', $request->id)->update([
+            Cooperative::where('id', $id)->update([
+                'user_id' => $user->id,
                 'name' => $request->name,
+                'registration_number' => $request->name . '-' . date('Y:m:d H:i:s'),
                 'effective_date' => $request->effective_date,
                 'status_grade' => $request->status_grade,
                 'date_of_establishment' => $request->date_of_establishment,
@@ -114,9 +166,9 @@ class CooperativeController extends Controller
                 'vouchers',
                 'transactionDetails',
             ])->where('id', $request->id)->first();
-            return ResponseFormatter::success($cooperative);
         } catch (Exception $th) {
             return ResponseFormatter::error($th->getMessage());
         }
+            return ResponseFormatter::success($cooperative);
     }
 }

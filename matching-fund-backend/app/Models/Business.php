@@ -9,6 +9,9 @@ class Business extends Model
 {
     use HasFactory;
 
+    // table name
+    protected $table = 'business';
+
     protected $fillable = [
         'name',
         'category'

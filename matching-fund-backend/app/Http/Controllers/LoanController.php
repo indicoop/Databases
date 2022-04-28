@@ -6,6 +6,7 @@ use App\Helpers\ResponseFormatter;
 use App\Models\Loan;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 
 class LoanController extends Controller
 {
@@ -14,17 +15,28 @@ class LoanController extends Controller
         try {
             $user = $request->user();
             // check if user is cooperative chairman or super admin
-            if ($user->role->id == 1 || $user->role->id == 2) {
+            if ($user->role->id == 1) {
                 $loans = Loan::with([
+                    'user',
+                    'loanType',
+                ])->get();
+                return ResponseFormatter::success($loans);
+            } else if ($user->role->id == 2) {
+                // if role is 2 (member), fetch cooperatives where user is cooperative chairman
+                $loans = Loan::where([
+                    'user_id' => $user->id,
+                ])->with([
                     'user',
                     'loanType',
                 ])->get();
                 return ResponseFormatter::success($loans);
             } else if ($user->role->id == 3) {
                 // if role is 3 (member), fetch cooperatives where user is cooperative member
-                $loans = $user->with('loan')->where([
-                    ['role_id', '=', 3],
-                    ['cooperative_id', '=', $user->cooperative_id]
+                $loans = Loan::where([
+                    'user_id' => $user->id,
+                ])->with([
+                    'user',
+                    'loanType',
                 ])->get();
                 return ResponseFormatter::success($loans);
             } else {
@@ -54,12 +66,8 @@ class LoanController extends Controller
     {
         try {
             $user = $request->user();
-            // check if user is cooperative chairman or super admin
-            if ($user->role->id == 1 || $user->role->id == 2) {
-                $loan = Loan::create($request->all());
-                return ResponseFormatter::success($loan);
-            } else if ($user->role->id == 3) {
-                // if role is 3 (member), fetch cooperatives where user is cooperative member
+            // if role is 2 cooperative chairman or 3 member
+            if ( $user->role->id == 2 || $user->role->id == 3) {
                 // create loan by cooperative member id
                 $loan = Loan::create([
                     'user_id' => $user->id,
@@ -77,6 +85,39 @@ class LoanController extends Controller
             }
         } catch (Exception $th) {
             return ResponseFormatter::error($th->getMessage(), 'Error creating loan');
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            // check if user is cooperative chairman
+            $user = $request->user();
+            if ($user->role->id == 2) {
+                $loan = Loan::findOrFail($id);
+                $loan->update($request->all());
+                return ResponseFormatter::success($loan, 'Loan updated successfully');
+            } else {
+                return ResponseFormatter::error('Unauthorized', 401);
+            }
+        } catch (Exception $th) {
+            return ResponseFormatter::error($th->getMessage(), 'Error updating loan');
+        }
+    }
+
+    public function delete(Request $request ,$id)
+    {
+        try {
+            $user = $request->user();
+            if($user->role->id == 2) {
+                $loan = Loan::findOrFail($id);
+                $loan->delete();
+                return ResponseFormatter::success($loan, 'Loan deleted successfully');
+            } else {
+                return ResponseFormatter::error('Unauthorized', 401);
+            }
+        } catch (Exception $th) {
+            return ResponseFormatter::error($th->getMessage());
         }
     }
 

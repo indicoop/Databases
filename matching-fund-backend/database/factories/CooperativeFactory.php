@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,6 +18,7 @@ class CooperativeFactory extends Factory
     public function definition()
     {
         return [
+            'user_id' => $this->faker->unique()->numberBetween(1, 40),
             'name' => $this->faker->unique()->company(),
             'registration_number' => $this->faker->unique()->numberBetween(100000000, 999999999),
             'status' => $this->faker->boolean(),
