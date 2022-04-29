@@ -6,6 +6,7 @@ use App\Http\Controllers\CooperativeController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\StashController;
 use App\Http\Controllers\UserController;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
@@ -30,13 +31,14 @@ Route::get('cooperative/{id}', [CooperativeController::class, 'fetchActiveCooper
 
 // products public
 Route::get('all-products', [ProductController::class, 'fetchAllProducts']); // testing
-Route::get('product/{id}', [ProductController::class, 'fetchProduct']); // testing
+Route::get('public-product/{id}', [ProductController::class, 'fetchProduct']); // testing
 
 Route::middleware('auth:sanctum')->group(function() {
     // users
     Route::get('user', [UserController::class, 'fetch']);
     Route::post('logout', [UserController::class, 'logout']);
     Route::post('update', [UserController::class, 'update']);
+    
     // update verification cooperative
     Route::post('uvc', [UserController::class, 'updateVerificationCooperative']);
 
@@ -80,4 +82,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('loan-create', [LoanController::class, 'store']);
     Route::post('loan-update/{id}', [LoanController::class, 'update']);
     Route::post('loan-delete/{id}', [LoanController::class, 'delete']);
+
+    // stash
+    Route::post('stash/create', [StashController::class, 'create']);
 });

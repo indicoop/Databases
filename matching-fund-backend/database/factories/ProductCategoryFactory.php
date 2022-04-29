@@ -18,7 +18,7 @@ class ProductCategoryFactory extends Factory
     {
         return [
             'name' => $this->faker->unique()->word(),
-            'thumbnail' => $this->faker->unique()->imageUrl(),
+            'thumbnail' => $this->faker->imageUrl(),
         ];
     }
 }

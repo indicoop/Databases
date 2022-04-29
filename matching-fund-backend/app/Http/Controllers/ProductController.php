@@ -18,11 +18,13 @@ class ProductController extends Controller
         $cooperative_id = Cooperative::where('user_id', $user->id)->first()->id;
         if ($user->role->id == 2) {
             $products = BusinessDetail::with([
-                'product' => function ($query) {
-                    $query->with('product_category');
-                }
+                'products',
+                'products.productCategory',
             ])->where('cooperative_id', $cooperative_id)->get();
-            return ResponseFormatter::success($products, 'Products fetched successfully');
+            return ResponseFormatter::success([
+                'cooperative' => Cooperative::where('user_id', $user->id)->first(),
+                'products' => $products,
+            ], 'Products fetched successfully');
         } else {
             return ResponseFormatter::error('Unauthorized', 'Unauthorized', 401);
         }
@@ -31,14 +33,16 @@ class ProductController extends Controller
     public function fetch($id)
     {
         $user = Auth::user();
-        // get detail of product with all its categories by id
-        $product = Product::with('product_category')->find($id);
+        $cooperative_id = Cooperative::where('user_id', $user->id)->first()->id;
         if ($user->role->id == 2) {
-            if ($product) {
-                return ResponseFormatter::success($product, 'Product fetched successfully');
-            } else {
-                return ResponseFormatter::error('Product not found', 'Product not found', 404);
-            }
+            $products = BusinessDetail::with([
+                'products',
+                'products.productCategory',
+            ])->where('cooperative_id', $cooperative_id)->where('id', $id)->get();
+            return ResponseFormatter::success([
+                'cooperative' => Cooperative::where('user_id', $user->id)->first(),
+                'products' => $products,
+            ], 'Products fetched successfully');
         } else {
             return ResponseFormatter::error('Unauthorized', 'Unauthorized', 401);
         }
@@ -120,8 +124,8 @@ class ProductController extends Controller
     public function fetchAllProducts()
     {
         $products = BusinessDetail::with([
-            'products',
             'cooperative',
+            'products',
             'business'
         ])->get();
         if ($products) {
@@ -134,8 +138,8 @@ class ProductController extends Controller
     public function fetchProduct($id)
     {
         $products = BusinessDetail::with([
-            'products',
             'cooperative',
+            'products',
             'business'
         ])->where('id', $id)->get();
 

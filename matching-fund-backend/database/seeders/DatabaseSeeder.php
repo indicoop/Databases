@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Business;
+use App\Models\BusinessDetail;
 use App\Models\Cooperative;
 use App\Models\Loan;
 use App\Models\LoanType;
@@ -21,12 +23,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // Role::factory(4)->create();
-        // User::factory(40)->create();
-        // LoanType::factory(10)->create();
-        // Loan::factory(100)->create();
-        // Cooperative::factory(40)->create();
+        Role::factory(4)->create();
+        User::factory(40)->create();
+        LoanType::factory(10)->create();
+        Loan::factory(100)->create();
+        Cooperative::factory(40)->create();
 
         ProductCategory::factory(10)->create();
+        Product::factory(80)->create();
+        Business::factory(7)->create();
+        BusinessDetail::factory(40)->create();
     }
 }
