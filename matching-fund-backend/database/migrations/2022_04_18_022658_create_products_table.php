@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->integer('detail_business_id');
+            $table->integer('business_detail_id');
             $table->integer('product_category_id');
             $table->string('name');
             $table->float('price');
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->date('production_date');
             $table->float('discount')->nullable();
             $table->float('weight')->nullable();
-            $table->integer('voucher_id');
+            $table->integer('voucher_id')->nullable();
             $table->timestamps();
         });
     }

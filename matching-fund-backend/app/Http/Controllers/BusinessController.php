@@ -5,10 +5,47 @@ namespace App\Http\Controllers;
 use App\Helpers\ResponseFormatter;
 use App\Models\Business;
 use Exception;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BusinessController extends Controller
 {
+
+    public function index(Request $request)
+    {
+        $user = Auth::user();
+        try {
+            if ($user->role->id == 1) {
+                if ($request->category) {
+                    $business = Business::where('category', 'like', "%$request->category%")->get();
+                } else {
+                    $business = Business::all();
+                }
+                return ResponseFormatter::success($business, 'Business fetched successfully');
+            } else {
+                return ResponseFormatter::error('Unauthorized', 'You are not authorized to perform this action', 401);
+            }
+        } catch (Exception $th) {
+            return ResponseFormatter::error('Internal Server Error', $th->getMessage(), 500);
+        }
+    }
+
+    public function fetch($id)
+    {
+        $user = Auth::user();
+        if ($id) {
+            if ($user->role->id == 1) {
+                try {
+                    $bussiness = Business::with('businessDetails')->findOrFail($id);
+                    return ResponseFormatter::success($bussiness, 'Business fetched successfully');
+                } catch (Exception $th) {
+                    return ResponseFormatter::error($th->getMessage(), 'Business not found', 404);
+                }
+            }
+        }
+    }
+
     public function create(Request $request)
     {
         $user = $request->user();
@@ -81,6 +118,21 @@ class BusinessController extends Controller
             }
         } catch (Exception $th) {
             return ResponseFormatter::error($th->getMessage(), 'Error updating business');
+        }
+    }
+
+    public function delete($id)
+    {
+        $user = Auth::user();
+        try {
+            if ($user->role->id == 1) {
+                $business = Business::where('id', $id)->delete();
+                return ResponseFormatter::success($business, 'Business deleted successfully');
+            } else {
+                return ResponseFormatter::error('Unauthorized', 'You are not authorized to perform this action', 401);
+            }
+        } catch (Exception $th) {
+            return ResponseFormatter::error($th->getMessage(), 'Error deleting business');
         }
     }
 }

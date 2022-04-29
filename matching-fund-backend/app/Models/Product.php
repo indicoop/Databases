@@ -10,7 +10,7 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        'detail_business_id',
+        'business_detail_id',
         'product_category_id',
         'name',
         'price',
@@ -28,7 +28,7 @@ class Product extends Model
     // belongsTo (one to one) relationship with BusinessDetail
     public function businessDetail()
     {
-        return $this->belongsTo(BusinessDetail::class, 'detail_business_id');
+        return $this->belongsTo(BusinessDetail::class, 'business');
     }
 
     // belongsTo (one to one) relationship with ProductCategory 
