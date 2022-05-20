@@ -3,10 +3,13 @@
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\BusinessDetailController;
 use App\Http\Controllers\CooperativeController;
+use App\Http\Controllers\CourierController;
+use App\Http\Controllers\InstallmentController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StashController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +35,10 @@ Route::get('cooperative/{id}', [CooperativeController::class, 'fetchActiveCooper
 // products public
 Route::get('all-products', [ProductController::class, 'fetchAllProducts']); // testing
 Route::get('public-product/{id}', [ProductController::class, 'fetchProduct']); // testing
+
+// couriers
+Route::get('couriers', [CourierController::class, 'index']);
+Route::get('courier/{id}', [CourierController::class, 'fetch']);
 
 Route::middleware('auth:sanctum')->group(function() {
     // users
@@ -84,5 +91,29 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('loan-delete/{id}', [LoanController::class, 'delete']);
 
     // stash
+    Route::get('stashs', [StashController::class, 'index']);
+    Route::get('stash/{id}', [StashController::class, 'fetch']);
     Route::post('stash/create', [StashController::class, 'create']);
+    Route::post('stash/update/{id}', [StashController::class, 'update']);
+    Route::post('stash/delete/{id}', [StashController::class, 'delete']);
+
+    // courier
+    Route::post('courier/create', [CourierController::class, 'create']);
+    Route::post('courier/update/{id}', [CourierController::class, 'update']);
+    Route::post('courier/delete/{id}', [CourierController::class, 'delete']);
+
+    // installment
+    Route::get('installments', [InstallmentController::class, 'index']);
+    Route::get('installment/{id}', [InstallmentController::class, 'fetch']);
+    Route::post('installment/create', [InstallmentController::class, 'create']);
+    Route::post('installment/update/{id}', [InstallmentController::class, 'update']);
+    Route::post('installment/delete/{id}', [InstallmentController::class, 'delete']);
+
+    // transaction
+    Route::get('transactions', [TransactionController::class, 'index']);
+    Route::get('transaction/{id}', [TransactionController::class, 'fetch']);
+    Route::post('transaction/create', [TransactionController::class, 'create']);
+    Route::post('transaction/update/{id}', [TransactionController::class, 'update']);
+    Route::post('transaction/delete/{id}', [TransactionController::class, 'delete']);
+
 });

@@ -9,6 +9,8 @@ class Stash extends Model
 {
     use HasFactory;
 
+    public $table = 'stashs';
+
     protected $fillable = [
         'user_id',
         'beginning_balance',

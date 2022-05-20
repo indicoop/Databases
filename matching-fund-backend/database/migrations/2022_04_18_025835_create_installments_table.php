@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('installment_type');
             $table->integer('installment_number');
             $table->date('pay_date');
-            $table->date('lateness_date');
+            $table->date('lateness_date')->nullable();
             $table->float('total_installment');
             $table->float('interest');
             $table->float('fine');
