@@ -40,7 +40,7 @@ class Product extends Model
     // hasOne (one to one) relationship with Voucher
     public function voucher()
     {
-        return $this->hasOne(Voucher::class, 'voucher_id');
+        return $this->hasOne(Voucher::class, 'id');
     }
 
     // hasMany (one to many) relationship with Whislist

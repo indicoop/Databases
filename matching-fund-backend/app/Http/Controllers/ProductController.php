@@ -137,14 +137,18 @@ class ProductController extends Controller
 
     public function fetchProduct($id)
     {
-        $products = BusinessDetail::with([
-            'cooperative',
-            'products',
-            'business'
-        ])->where('id', $id)->get();
+        // $products = BusinessDetail::with([
+        //     'cooperative',
+        //     'products',
+        //     'business'
+        // ])->where('id', $id)->get();
 
-        if ($products) {
-            return ResponseFormatter::success($products, 'Products fetched successfully');
+        $product = Product::with([
+            'productCategory'
+        ])->where('id', $id)->first();
+
+        if ($product) {
+            return ResponseFormatter::success($product, 'Products fetched successfully');
         } else {
             return ResponseFormatter::error('Products not found', 'Products not found', 404);
         }
