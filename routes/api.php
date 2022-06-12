@@ -29,7 +29,7 @@ Route::post('register', [UserController::class, 'register']);
 Route::post('login', [UserController::class, 'login']);
 
 // cooperatives public
-Route::get('all-coperatives', [CooperativeController::class, 'fetchActiveCooperatives']);
+Route::get('all-coperatives', [CooperativeController::class, 'getActiveCooperatives']);
 Route::get('cooperative/{id}', [CooperativeController::class, 'fetchActiveCooperatives']);
 
 // products public
