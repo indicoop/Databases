@@ -16,7 +16,7 @@ class ProductCollection extends ResourceCollection
     public function toArray($request)
     {
         return $this->collection->transform(
-            fn(Product $product) => [
+            fn($product) => [
                 'id' => $product->id,
                 'thumbnail' => $product->thumbnail,
                 'category' => $product->productCategory->name,
