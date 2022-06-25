@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ResponseFormatter;
+use App\Http\Resources\AllProductCollection;
+use App\Http\Resources\ProductCollection;
+use App\Http\Resources\ProductResource;
 use App\Models\BusinessDetail;
 use App\Models\Cooperative;
 use App\Models\Product;
@@ -17,14 +20,12 @@ class ProductController extends Controller
         $user = Auth::user();
         $cooperative_id = Cooperative::where('user_id', $user->id)->first()->id;
         if ($user->role->id == 2) {
-            $products = BusinessDetail::with([
-                'products',
-                'products.productCategory',
-            ])->where('cooperative_id', $cooperative_id)->get();
-            return ResponseFormatter::success([
-                'cooperative' => Cooperative::where('user_id', $user->id)->first(),
-                'products' => $products,
-            ], 'Products fetched successfully');
+            $products = Product::whereHas('businessDetail', function ($q) use ($cooperative_id)
+            {
+                $q->where('cooperative_id', $cooperative_id);
+            })->get();
+
+            return ResponseFormatter::success(new ProductCollection($products), 'Products fetched successfully');
         } else {
             return ResponseFormatter::error('Unauthorized', 'Unauthorized', 401);
         }
@@ -33,16 +34,9 @@ class ProductController extends Controller
     public function fetch($id)
     {
         $user = Auth::user();
-        $cooperative_id = Cooperative::where('user_id', $user->id)->first()->id;
-        if ($user->role->id == 2) {
-            $products = BusinessDetail::with([
-                'products',
-                'products.productCategory',
-            ])->where('cooperative_id', $cooperative_id)->where('id', $id)->get();
-            return ResponseFormatter::success([
-                'cooperative' => Cooperative::where('user_id', $user->id)->first(),
-                'products' => $products,
-            ], 'Products fetched successfully');
+        $product = Product::find($id);
+        if ($user->role->id == 2 && ($product->businessDetail->cooperative->id == $user->cooperative->id)) {
+            return ResponseFormatter::success(new ProductResource($product), 'Products fetched successfully');
         } else {
             return ResponseFormatter::error('Unauthorized', 'Unauthorized', 401);
         }
@@ -123,13 +117,10 @@ class ProductController extends Controller
 
     public function fetchAllProducts()
     {
-        $products = BusinessDetail::with([
-            'cooperative',
-            'products',
-            'business'
-        ])->get();
+        $products = Product::all();
+
         if ($products) {
-            return ResponseFormatter::success($products, 'Products fetched successfully');
+        return ResponseFormatter::success(new ProductCollection($products), 'Products fetched successfully');
         } else {
             return ResponseFormatter::error('Products not found', 'Products not found', 404);
         }
@@ -137,16 +128,12 @@ class ProductController extends Controller
 
     public function fetchProduct($id)
     {
-        $products = BusinessDetail::with([
-            'cooperative',
-            'products',
-            'business'
-        ])->where('id', $id)->get();
-
-        if ($products) {
-            return ResponseFormatter::success($products, 'Products fetched successfully');
+        $product = Product::find($id);
+        if ($product) {
+            return ResponseFormatter::success(new ProductResource($product), 'Products fetched successfully');
         } else {
             return ResponseFormatter::error('Products not found', 'Products not found', 404);
         }
     }
 }
+

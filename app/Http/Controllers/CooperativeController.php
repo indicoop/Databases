@@ -82,7 +82,7 @@ class CooperativeController extends Controller
         $user = $request->user();
         try {
             //  if role is 2 (cooperative chairman)
-            if ($user->role_id == 4) {
+            if ($user->role_id == 2) {
                 $request->validate([
                     'name' => 'required|string|max:255|unique:cooperatives,name',
                     'status' => 'required|boolean',

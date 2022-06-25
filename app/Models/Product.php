@@ -28,10 +28,10 @@ class Product extends Model
     // belongsTo (one to one) relationship with BusinessDetail
     public function businessDetail()
     {
-        return $this->belongsTo(BusinessDetail::class, 'business');
+        return $this->belongsTo(BusinessDetail::class, 'business_detail_id');
     }
 
-    // belongsTo (one to one) relationship with ProductCategory 
+    // belongsTo (one to one) relationship with ProductCategory
     public function productCategory()
     {
         return $this->belongsTo(ProductCategory::class, 'product_category_id');
