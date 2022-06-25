@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
         Loan::factory(100)->create();
         Cooperative::factory(40)->create();
         ProductCategory::factory(10)->create();
+        Product::factory(100)->create();
         Product::factory(80)->create();
         Business::factory(7)->create();
         BusinessDetail::factory(40)->create();

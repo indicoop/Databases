@@ -30,4 +30,10 @@ class Voucher extends Model
     {
         return $this->hasMany(Transaction::class);
     }
+
+    // hasone (one to one) relationship with Product
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'voucher_id', 'id');
+    }
 }

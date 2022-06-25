@@ -58,22 +58,25 @@ class CooperativeController extends Controller
                 'transactionDetails',
             ])->where('id', $id)->first();
             return ResponseFormatter::success($cooperative);
-        } else {
-            try {
-                $cooperatives = Cooperative::with([
-                    'users',
-                    'businessDetails',
-                    'vouchers',
-                    'transactionDetails',
-                ])->where([
-                    ['status', '=', true],
-                    ['is_verified', '=', true],
-                ])->get();
+        }
+    }
 
-                return ResponseFormatter::success($cooperatives);
-            } catch (Exception $th) {
-                return ResponseFormatter::error($th->getMessage());
-            }
+    public function getActiveCooperatives()
+    {
+        try {
+            $cooperatives = Cooperative::with([
+                'users',
+                'businessDetails',
+                'vouchers',
+                'transactionDetails',
+            ])->where([
+                ['status', '=', true],
+                ['is_verified', '=', true],
+            ])->get();
+
+            return ResponseFormatter::success($cooperatives);
+        } catch (Exception $th) {
+            return ResponseFormatter::error($th->getMessage());
         }
     }
 
@@ -169,6 +172,6 @@ class CooperativeController extends Controller
         } catch (Exception $th) {
             return ResponseFormatter::error($th->getMessage());
         }
-            return ResponseFormatter::success($cooperative);
+        return ResponseFormatter::success($cooperative);
     }
 }
