@@ -29,8 +29,14 @@ class CooperativeFactory extends Factory
             'email' => $this->faker->unique()->safeEmail(),
             'phone_number' => $this->faker->phoneNumber(),
             'form_of_cooperative' => $this->faker->randomElement(['Koperasi Produksi', 'Koperasi Konsumsi', 'Koperasi Simpan Pinjam', 'Koperasi Investasi']),
+<<<<<<< HEAD
             'certificate' => $this->faker->imageUrl(),
             'legal_entity_certificate' => $this->faker->imageUrl(),
+=======
+            'certificate' => 'uploads/cooperative/certificate/default.png',
+            'legal_entity_certificate' => 'uploads/cooperative/certificate/default.png',
+            'profile_picture' => 'uploads/cooperative/profile_picture/default.png',
+>>>>>>> a5b7f309b3f78885277dbffc02d850186bf63f73
             'is_verified' => $this->faker->boolean(),
         ];
     }

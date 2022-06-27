@@ -138,11 +138,17 @@ class CooperativeController extends Controller
                         $file_name_legal_entity_certificate = uniqid() . '.' . $legal_entity_certificate->getClientOriginalExtension();
 
                         // move file to public/uploads/cooperative/profile_picture
+<<<<<<< HEAD
                         $profile_picture->move(public_path('uploads/cooperative/profile_picture'), $file_name);
                         $certificate->move(public_path('uploads/cooperative/certificate'), $file_name_certificate);
                         $legal_entity_certificate->move(public_path('uploads/cooperative/legal_entity_certificate'), $file_name_legal_entity_certificate);
 
 
+=======
+                        $profile_picture->move(public_path('profile_picture'), $file_name);
+                        $certificate->move(public_path('certificate'), $file_name_certificate);
+                        $legal_entity_certificate->move(public_path('legal_entity_certificate'), $file_name_legal_entity_certificate);
+>>>>>>> a5b7f309b3f78885277dbffc02d850186bf63f73
 
                         $cooperative = Cooperative::create([
                             'user_id' => $user->id,
@@ -156,9 +162,15 @@ class CooperativeController extends Controller
                             'email' => $request->email,
                             'phone_number' => $request->phone_number,
                             'form_of_cooperative' => $request->form_of_cooperative,
+<<<<<<< HEAD
                             'certificate' => 'uploads/cooperative/profile_picture/' . $file_name,
                             'legal_entity_certificate' => 'uploads/cooperative/legal_entity_certificate/' . $file_name_legal_entity_certificate,
                             'profile_picture' => 'uploads/cooperative/profile_picture/' . $file_name_certificate,
+=======
+                            'certificate' => 'certificate/' . $file_name,
+                            'legal_entity_certificate' => 'legal_entity_certificate/' . $file_name_legal_entity_certificate,
+                            'profile_picture' => 'profile_picture/' . $file_name_certificate,
+>>>>>>> a5b7f309b3f78885277dbffc02d850186bf63f73
                             'is_verified' => false,
                         ]);
                         return ResponseFormatter::success($cooperative, 'Cooperative created successfully');
@@ -174,6 +186,7 @@ class CooperativeController extends Controller
 
     public function update(Request $request, $id)
     {
+<<<<<<< HEAD
         try {
             $user = $request->user();
             $request->validate([
@@ -253,5 +266,85 @@ class CooperativeController extends Controller
             return ResponseFormatter::error($th->getMessage());
         }
         return ResponseFormatter::success($cooperative);
+=======
+        $user = $request->user();
+        try {
+            //  if role is 2 (cooperative chairman)
+            if ($user->role_id == 2) {
+                $request->validate([
+                    'name' => 'required|string|max:255|unique:cooperatives,name,' . $id,
+                    'status' => 'required|boolean',
+                    'effective_date' => 'required|date',
+                    'status_grade' => 'required|string|max:255',
+                    'date_of_establishment' => 'required|date',
+                    'address' => 'required|string|max:255',
+                    'email' => 'required|string|max:255|unique:cooperatives,email,' . $id,
+                    'phone_number' => 'required|string|max:255',
+                    'form_of_cooperative' => 'required|string|max:255',
+                    'certificate' => 'required|mimes:pdf,jpg,jpeg,png',
+                    'legal_entity_certificate' => 'required|mimes:pdf,jpg,jpeg,png',
+                    'profile_picture' => 'required|mimes:pdf,jpg,jpeg,png',
+                ]);
+
+                if ($request->hasFile('profile_picture') && $request->hasFile('certificate') && $request->hasFile('legal_entity_certificate')) {
+
+                    $cooperative_old = Cooperative::find($id);
+                    $old_profile_picture = $cooperative_old->profile_picture;
+                    $old_certificate = $cooperative_old->certificate;
+                    $old_legal_entity_certificate = $cooperative_old->legal_entity_certificate;
+
+                    // delete old files
+                    if(file_exists(public_path($old_profile_picture))){
+                        unlink(public_path($old_profile_picture));
+                    }
+                    if(file_exists(public_path($old_certificate))){
+                        unlink(public_path($old_certificate));
+                    }
+                    if(file_exists(public_path($old_legal_entity_certificate))){
+                        unlink(public_path($old_legal_entity_certificate));
+                    }
+
+                    $profile_picture = $request->file('profile_picture');
+                    $certificate = $request->file('certificate');
+                    $legal_entity_certificate = $request->file('legal_entity_certificate');
+
+                    // generate random string for file name
+                    $file_name = uniqid() . '.' . $profile_picture->getClientOriginalExtension();
+                    $file_name_certificate = uniqid() . '.' . $certificate->getClientOriginalExtension();
+                    $file_name_legal_entity_certificate = uniqid() . '.' . $legal_entity_certificate->getClientOriginalExtension();
+
+                    $profile_picture->move(public_path('profile_picture'), $file_name);
+                    $certificate->move(public_path('certificate'), $file_name_certificate);
+                    $legal_entity_certificate->move(public_path('legal_entity_certificate'), $file_name_legal_entity_certificate);
+
+                    $cooperative = Cooperative::find($id);
+                    $cooperative->update([
+                        'user_id' => $user->id,
+                        'name' => $request->name,
+                        'registration_number' => uniqid(),
+                        'status' => $request->status,
+                        'effective_date' => $request->effective_date,
+                        'status_grade' => $request->status_grade,
+                        'date_of_establishment' => $request->date_of_establishment,
+                        'address' => $request->address,
+                        'email' => $request->email,
+                        'phone_number' => $request->phone_number,
+                        'form_of_cooperative' => $request->form_of_cooperative,
+                        'certificate' => 'profile_picture/' . $file_name,
+                        'legal_entity_certificate' => 'legal_entity_certificate/' . $file_name_legal_entity_certificate,
+                        'profile_picture' => 'profile_picture/' . $file_name_certificate,
+                        'is_verified' => false,
+                    ]);
+                    return ResponseFormatter::success($cooperative, 'Cooperative updated successfully');
+                } else {
+                    return ResponseFormatter::error('Please upload all required files');
+                }
+            } else {
+                return ResponseFormatter::error('You are not authorized to perform this action');
+            }
+        } catch (Exception $th) {
+            return ResponseFormatter::error($th->getMessage(), 'Error updating cooperative');
+        }
+>>>>>>> a5b7f309b3f78885277dbffc02d850186bf63f73
     }
 }

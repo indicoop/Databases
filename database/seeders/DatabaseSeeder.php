@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+<<<<<<< HEAD
         // Role::factory(4)->create();
         // User::factory(40)->create();
         // LoanType::factory(10)->create();
@@ -39,6 +40,19 @@ class DatabaseSeeder extends Seeder
         // Business::factory(7)->create();
         // BusinessDetail::factory(40)->create();
         // Courier::factory(10)->create();
+=======
+        Role::factory(4)->create();
+        User::factory(40)->create();
+        LoanType::factory(10)->create();
+        Loan::factory(100)->create();
+        Cooperative::factory(40)->create();
+        ProductCategory::factory(10)->create();
+        Product::factory(100)->create();
+        Product::factory(80)->create();
+        Business::factory(7)->create();
+        BusinessDetail::factory(40)->create();
+        Courier::factory(10)->create();
+>>>>>>> a5b7f309b3f78885277dbffc02d850186bf63f73
 
         Transaction::create([
             'product_id' => 1,
