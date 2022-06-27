@@ -22,7 +22,11 @@ class ProductResource extends JsonResource
             'price' => $this->price,
             'stock' => $this->stock,
             'description' => $this->description,
-            'cooperative' => $this->businessDetail->cooperative->name
+            'cooperative_id' => $this->businessDetail->cooperative->id,
+            'cooperative' => $this->businessDetail->cooperative->name,
+            'rating' => (float) $this->rating->rating,
+            'total_transaction' => $this->totalTransactionCount->total_transaction_count,
+            'total_product_quantity_sold' => (int) $this->totalQuantity->total_quantity
         ];
     }
 }

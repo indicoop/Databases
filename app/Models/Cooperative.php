@@ -24,6 +24,7 @@ class Cooperative extends Model
         'certificate',
         'legal_entity_certificate',
         'is_verified',
+        'profile_picture',
     ];
 
     // RELATIONSHIPS
@@ -52,5 +53,14 @@ class Cooperative extends Model
         return $this->hasMany(TransactionDetail::class);
     }
 
-    
+    // get total quantity transaction of product by cooperative
+    public function getTotalQuantityTransactionOfProductByCooperative($product_id)
+    {
+        $total_quantity = 0;
+        $transaction_details = $this->transactionDetails;
+        foreach ($transaction_details as $transaction_detail) {
+            $total_quantity += $transaction_detail->getTotalQuantityTransactionOfProductByTransactionDetail($product_id);
+        }
+        return $total_quantity;
+    }
 }

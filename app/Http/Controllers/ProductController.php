@@ -9,9 +9,11 @@ use App\Http\Resources\ProductResource;
 use App\Models\BusinessDetail;
 use App\Models\Cooperative;
 use App\Models\Product;
+use App\Models\Rating;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -20,8 +22,7 @@ class ProductController extends Controller
         $user = Auth::user();
         $cooperative_id = Cooperative::where('user_id', $user->id)->first()->id;
         if ($user->role->id == 2) {
-            $products = Product::whereHas('businessDetail', function ($q) use ($cooperative_id)
-            {
+            $products = Product::whereHas('businessDetail', function ($q) use ($cooperative_id) {
                 $q->where('cooperative_id', $cooperative_id);
             })->get();
 
@@ -120,7 +121,7 @@ class ProductController extends Controller
         $products = Product::all();
 
         if ($products) {
-        return ResponseFormatter::success(new ProductCollection($products), 'Products fetched successfully');
+            return ResponseFormatter::success(new ProductCollection($products), 'Products fetched successfully');
         } else {
             return ResponseFormatter::error('Products not found', 'Products not found', 404);
         }
@@ -130,10 +131,12 @@ class ProductController extends Controller
     {
         $product = Product::find($id);
         if ($product) {
-            return ResponseFormatter::success(new ProductResource($product), 'Products fetched successfully');
+            return ResponseFormatter::success(
+                new ProductResource($product),
+                'Products fetched successfully'
+            );
         } else {
             return ResponseFormatter::error('Products not found', 'Products not found', 404);
         }
     }
 }
-

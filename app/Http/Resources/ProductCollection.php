@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Models\Product;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Support\Facades\DB;
 
 class ProductCollection extends ResourceCollection
 {
@@ -16,7 +17,7 @@ class ProductCollection extends ResourceCollection
     public function toArray($request)
     {
         return $this->collection->transform(
-            fn($product) => [
+            fn ($product) => [
                 'id' => $product->id,
                 'thumbnail' => $product->thumbnail,
                 'category' => $product->productCategory->name,
@@ -24,7 +25,11 @@ class ProductCollection extends ResourceCollection
                 'price' => $product->price,
                 'stock' => $product->stock,
                 'description' => $product->description,
-                'cooperative' => $product->businessDetail->cooperative->name
+                'cooperative_id' => $this->businessDetail->cooperative->id,
+                'cooperative' => $product->businessDetail->cooperative->name,
+                'rating' => $product->rating->rating,
+                'total_transaction' => $product->totalTransactionCount->total_transaction_count,
+                'total_product_quantity_sold' => $product->totalQuantity->total_quantity
             ]
         );
     }

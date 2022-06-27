@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Product extends Model
 {
@@ -53,5 +54,28 @@ class Product extends Model
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
+    }
+
+    // hasMany (one to many) relationship with Rating
+    public function rating()
+    {
+        // return total rating of product by rating_value
+        return $this->hasOne(Rating::class, 'product_id')->selectRaw('sum(rating_value) / count(user_id) as rating');
+    }
+
+    // total_transaction_count where transasction_details.status = 'success'
+    public function totalTransactionCount()
+    {
+        return $this->hasOne(Transaction::class, 'product_id')->selectRaw('count(product_id) as total_transaction_count')->whereHas('transactionDetails', function ($query) {
+            $query->where('status', 'success');
+        });
+    }
+
+    // total quantity of product in transaction_details.status = 'success'
+    public function totalQuantity()
+    {
+        return $this->hasOne(Transaction::class, 'product_id')->selectRaw('sum(quantity) as total_quantity')->whereHas('transactionDetails', function ($query) {
+            $query->where('status', 'success');
+        });
     }
 }

@@ -26,8 +26,9 @@ return new class extends Migration
             $table->string('email');
             $table->string('phone_number');
             $table->string('form_of_cooperative');
-            $table->string('certificate');
-            $table->string('legal_entity_certificate');
+            $table->text('certificate'); // file
+            $table->text('legal_entity_certificate'); // file
+            $table->text('profile_picture'); // file
             $table->boolean('is_verified')->default(false);
             $table->timestamps();
         });

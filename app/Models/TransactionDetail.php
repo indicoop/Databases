@@ -9,6 +9,8 @@ class TransactionDetail extends Model
 {
     use HasFactory;
 
+    public $table = 'transaction_details';
+
     protected $fillable = [
         'transaction_id',
         'user_id',
@@ -19,7 +21,7 @@ class TransactionDetail extends Model
         'status',
         'shipping_fee',
         'transaction_date',
-];
+    ];
 
     // RELATIONSHIPS
 

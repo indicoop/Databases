@@ -8,10 +8,12 @@ use App\Http\Controllers\InstallmentController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RatingController;
 use App\Http\Controllers\StashController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Models\Product;
+use App\Models\Role;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,19 +35,23 @@ Route::get('all-coperatives', [CooperativeController::class, 'getActiveCooperati
 Route::get('cooperative/{id}', [CooperativeController::class, 'fetchActiveCooperatives']);
 
 // products public
-Route::get('all-products', [ProductController::class, 'fetchAllProducts']); // testing
-Route::get('public-product/{id}', [ProductController::class, 'fetchProduct']); // testing
+Route::get('all-products', [ProductController::class, 'fetchAllProducts']);
+Route::get('public-product/{id}', [ProductController::class, 'fetchProduct']);
+
+// rating
+Route::post('rating/store', [RatingController::class, 'store']);
+Route::post('rating/update/{id}', [RatingController::class, 'update']);
 
 // couriers
 Route::get('couriers', [CourierController::class, 'index']);
 Route::get('courier/{id}', [CourierController::class, 'fetch']);
 
-Route::middleware('auth:sanctum')->group(function() {
+Route::middleware('auth:sanctum')->group(function () {
     // users
     Route::get('user', [UserController::class, 'fetch']);
     Route::post('logout', [UserController::class, 'logout']);
     Route::post('update', [UserController::class, 'update']);
-    
+
     // update verification cooperative
     Route::post('uvc', [UserController::class, 'updateVerificationCooperative']);
 
@@ -115,5 +121,4 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('transaction/create', [TransactionController::class, 'create']);
     Route::post('transaction/update/{id}', [TransactionController::class, 'update']);
     Route::post('transaction/delete/{id}', [TransactionController::class, 'delete']);
-
 });
