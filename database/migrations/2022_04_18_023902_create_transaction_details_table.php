@@ -20,10 +20,9 @@ return new class extends Migration
             $table->integer('courier_id');
             $table->integer('cooperative_id');
             $table->integer('total_pay');
-            $table->integer('payment_method_id');
+            $table->integer('payment_method_id')->nullable();
             $table->string('status')->default('pending');
             $table->integer('shipping_fee')->nullable();
-            $table->date('transaction_date');
             $table->timestamps();
         });
     }
