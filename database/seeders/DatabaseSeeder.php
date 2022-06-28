@@ -56,7 +56,6 @@ class DatabaseSeeder extends Seeder
             'payment_method_id' => 1,
             'status' => 'success',
             'shipping_fee' => 10000,
-            'transaction_date' => now()
         ]);
     }
 }
