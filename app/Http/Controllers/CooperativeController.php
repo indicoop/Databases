@@ -27,7 +27,7 @@ class CooperativeController extends Controller
                 $cooperatives = $user->with('cooperative')->where([
                     ['role_id', '=', 2],
                     ['cooperative_id', '=', $user->cooperative_id]
-                ])->get();
+                ])->first();
 
                 $cooperative_detail = Cooperative::with([
                     'users',
@@ -37,7 +37,7 @@ class CooperativeController extends Controller
                 ])->where('id', $user->cooperative_id)->first();
 
                 return ResponseFormatter::success([
-                    'cooperative' => $cooperatives,
+                    'chairman' => $cooperatives,
                     'cooperative_detail' => $cooperative_detail
                 ]);
             } else if ($user->role->id == 3) {
