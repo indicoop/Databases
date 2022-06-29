@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\BusinessDetailController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CooperativeController;
 use App\Http\Controllers\CourierController;
 use App\Http\Controllers\InstallmentController;
@@ -33,7 +34,6 @@ Route::post('login', [UserController::class, 'login']);
 // cooperatives public
 Route::get('all-coperatives', [CooperativeController::class, 'getActiveCooperatives']);
 Route::get('cooperative/{id}', [CooperativeController::class, 'fetchActiveCooperatives']);
-
 // products public
 Route::get('all-products', [ProductController::class, 'fetchAllProducts']);
 Route::get('public-product/{id}', [ProductController::class, 'fetchProduct']);
@@ -45,6 +45,12 @@ Route::post('rating/update/{id}', [RatingController::class, 'update']);
 // couriers
 Route::get('couriers', [CourierController::class, 'index']);
 Route::get('courier/{id}', [CourierController::class, 'fetch']);
+
+// cart
+Route::get('carts', [CartController::class, 'index']); // get all cart of logged in user
+Route::post('cart/store', [CartController::class, 'store']);
+Route::post('cart/update/{id}', [CartController::class, 'update']);
+Route::delete('cart/delete/{id}', [CartController::class, 'delete']);
 
 Route::middleware('auth:sanctum')->group(function () {
     // users

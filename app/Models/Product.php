@@ -78,4 +78,9 @@ class Product extends Model
             $query->where('status', 'success');
         });
     }
+
+    public function cart()
+    {
+        return $this->hasMany(Cart::class, 'product_id');
+    }
 }

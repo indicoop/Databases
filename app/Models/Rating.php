@@ -20,7 +20,7 @@ class Rating extends Model
     // belongsTo (one to one) relationship with Product
     public function product()
     {
-        return $this->belongsTo(Product::class, 'product_id');
+        return $this->belongsTo(Product::class);
     }
 
     // belongsTo (one to one) relationship with User

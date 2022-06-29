@@ -26,7 +26,6 @@ class TransactionDetailFactory extends Factory
             'payment_method_id' => $this->faker->numberBetween(1, 5),
             'status' => $this->faker->randomElement(['pending', 'success', 'cancel']),
             'shipping_fee' => $this->faker->numberBetween(5000, 10000),
-            'transaction_date' => $this->faker->dateTimeBetween('-1 years', 'now'),
         ];
     }
 }

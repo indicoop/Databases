@@ -27,7 +27,7 @@ class CooperativeController extends Controller
                 $cooperatives = $user->with('cooperative')->where([
                     ['role_id', '=', 2],
                     ['cooperative_id', '=', $user->cooperative_id]
-                ])->get();
+                ])->first();
 
                 $cooperative_detail = Cooperative::with([
                     'users',
@@ -37,7 +37,7 @@ class CooperativeController extends Controller
                 ])->where('id', $user->cooperative_id)->first();
 
                 return ResponseFormatter::success([
-                    'cooperative' => $cooperatives,
+                    'chairman' => $cooperatives,
                     'cooperative_detail' => $cooperative_detail
                 ]);
             } else if ($user->role->id == 3) {
@@ -64,18 +64,16 @@ class CooperativeController extends Controller
             ])->where('id', $id)->first();
             // count total number of cooperatives in transaction_details table
             $total_transaction = TransactionDetail::where('cooperative_id', $id)->where('status', 'success')->count();
-            $total_quantity_sold = Transaction::selectRaw('sum(quantity) as total_quantity')->whereHas('transactionDetails', function ($query) {
-                $query->where('status', 'success');
-            })->groupBy('product_id')->first();
+            // $total_quantity_sold = Transaction::selectRaw('sum(quantity) as total_quantity')->whereHas('transactionDetails', function ($query) {
+            //     $query->where('status', 'success');
+            // })->groupBy('product_id')->first();
             // total product of cooperatives have
-            $total_product = Product::whereHas('businessDetail', function ($query) use ($id) {
-                $query->where('cooperative_id', $id);
-            })->count();
+            $total_product = $cooperative->businessDetails->count();
 
             return ResponseFormatter::success([
                 'cooperative' => $cooperative,
                 'total_transaction' => $total_transaction,
-                'total_quantity_sold' => $total_quantity_sold->total_quantity ?? 0,
+                // 'total_quantity_sold' => $total_quantity_sold->total_quantity ?? 0,
                 'total_product' => $total_product
             ]);
         }

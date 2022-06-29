@@ -116,15 +116,12 @@ class ProductController extends Controller
         }
     }
 
-    public function fetchAllProducts()
+    public function fetchAllProducts(Request $request)
     {
+        // create collection of all products
         $products = Product::all();
-
-        if ($products) {
-            return ResponseFormatter::success(new ProductCollection($products), 'Products fetched successfully');
-        } else {
-            return ResponseFormatter::error('Products not found', 'Products not found', 404);
-        }
+        // return collection of products
+        return ResponseFormatter::success(new AllProductCollection($products), 'Products fetched successfully');
     }
 
     public function fetchProduct($id)
