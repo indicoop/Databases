@@ -24,7 +24,7 @@ class AllProductResource extends JsonResource
             'description' => $this->description,
             'cooperative_id' => $this->businessDetail->cooperative->id,
             'cooperative' => $this->businessDetail->cooperative->name,
-            'rating' => $this->rating->rating,
+            'rating' => $this->ratingValue(),
             'total_transaction' => $this->totalTransactionCount->total_transaction_count,
             'total_product_quantity_sold' => $this->totalQuantity->total_quantity
         ];

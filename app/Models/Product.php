@@ -63,6 +63,11 @@ class Product extends Model
         return $this->hasMany(Rating::class, 'product_id');
     }
 
+    public function ratingValue()
+    {
+        return $this->ratings->avg('rating_value') ?? 0;
+    }
+
     // total_transaction_count where transasction_details.status = 'success'
     public function totalTransactionCount()
     {
