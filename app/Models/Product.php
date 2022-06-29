@@ -57,10 +57,10 @@ class Product extends Model
     }
 
     // hasMany (one to many) relationship with Rating
-    public function rating()
+    public function ratings()
     {
         // return total rating of product by rating_value
-        return $this->hasOne(Rating::class, 'product_id')->selectRaw('sum(rating_value) / count(user_id) as rating');
+        return $this->hasMany(Rating::class, 'product_id');
     }
 
     // total_transaction_count where transasction_details.status = 'success'
