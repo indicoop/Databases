@@ -34,9 +34,6 @@ class TransactionController extends Controller
 
     public function create(Request $request)
     {
-        $request->validate([
-            'voucher_id' => 'nullable',
-        ]);
         $user = $request->user();
         try {
             // delete all cart of user if there is any
@@ -51,7 +48,17 @@ class TransactionController extends Controller
                 }
             }
 
-            $transaction = Transaction::create($request->all());
+            if($request->voucher_id == null) {
+                $request->voucher_id = 0;
+            }
+
+            $transaction = Transaction::create([
+                'product_id' => $request->product_id,
+                'quantity' => $request->quantity,
+                'destination_address' => $request->destination_address,
+                'voucher_id' => $request->voucher_id,
+                'note' => $request->note,
+            ]);
 
             if ($transaction) {
                 $transactionDetails = TransactionDetail::create([
