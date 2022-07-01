@@ -52,6 +52,14 @@ class TransactionController extends Controller
                 $request->voucher_id = 0;
             }
 
+            if($request->payment_method_id == null) {
+                $request->payment_method_id = 0;
+            }
+
+            if($request->shipping_fee == null) {
+                $request->shipping_fee = 0;
+            }
+
             $transaction = Transaction::create([
                 'product_id' => $request->product_id,
                 'quantity' => $request->quantity,
