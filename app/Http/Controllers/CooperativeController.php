@@ -61,19 +61,14 @@ class CooperativeController extends Controller
                 'businessDetails',
                 'vouchers',
                 'transactionDetails',
+                'businessDetail.products'
             ])->where('id', $id)->first();
-            // count total number of cooperatives in transaction_details table
             $total_transaction = TransactionDetail::where('cooperative_id', $id)->where('status', 'success')->count();
-            // $total_quantity_sold = Transaction::selectRaw('sum(quantity) as total_quantity')->whereHas('transactionDetails', function ($query) {
-            //     $query->where('status', 'success');
-            // })->groupBy('product_id')->first();
-            // total product of cooperatives have
             $total_product = $cooperative->businessDetails->count();
 
             return ResponseFormatter::success([
                 'cooperative' => $cooperative,
                 'total_transaction' => $total_transaction,
-                // 'total_quantity_sold' => $total_quantity_sold->total_quantity ?? 0,
                 'total_product' => $total_product
             ]);
         }

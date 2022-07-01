@@ -27,7 +27,7 @@ class ProductCollection extends ResourceCollection
                 'description' => $product->description,
                 'cooperative_id' => $product->businessDetail->cooperative->id,
                 'cooperative' => $product->businessDetail->cooperative->name,
-                'rating' => $product->ratingValue() ?? 0,
+                'rating' => $product->ratingValue() ?? 0.00,
                 'total_transaction' => $product->totalTransactionCount->total_transaction_count,
                 'total_product_quantity_sold' => $product->totalQuantity->total_quantity
             ]
