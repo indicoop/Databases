@@ -51,13 +51,7 @@ class TransactionController extends Controller
                 }
             }
 
-            $transaction = Transaction::create([
-                'product_id' => $request->product_id,
-                'quantity' => $request->quantity,
-                'destination_address' => $request->destination_address,
-                'voucher_id' => $request->voucher_id,
-                'note' => $request->note,
-            ]);
+            $transaction = Transaction::create($request->all());
 
             if ($transaction) {
                 $transactionDetails = TransactionDetail::create([
