@@ -62,10 +62,11 @@ class CooperativeController extends Controller
                 'vouchers',
                 'transactionDetails',
             ])->where('id', $id)->first();
-            $products = Product::where('business_detail_id', $cooperative->business_detail_id)->get();
             $total_transaction = TransactionDetail::where('cooperative_id', $id)->where('status', 'success')->count();
             $total_product = $cooperative->businessDetails->count();
-            
+            $products = $cooperative->businessDetails->map(function ($business_detail) {
+                return $business_detail->products;
+            });
             $cooperative = $cooperative->toArray();
             $cooperative['products'] = $products;
 
