@@ -13,7 +13,7 @@ class CartController extends Controller
     {
         $user_id = $request->user_id;
         if($user_id) {
-            $carts = Cart::where('user_id', $user_id)->get();
+            $carts = Cart::with('product')->where('user_id', $user_id)->get();
             return ResponseFormatter::success($carts);
         } else {
             $carts = Cart::all();
