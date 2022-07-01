@@ -65,7 +65,7 @@ class Product extends Model
 
     public function ratingValue()
     {
-        return $this->ratings->avg('rating_value') ?? 0;
+        return $this->ratings->avg('rating_value') ?? 0.00;
     }
 
     // total_transaction_count where transasction_details.status = 'success'
