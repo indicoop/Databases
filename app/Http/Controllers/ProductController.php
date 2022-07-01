@@ -36,6 +36,9 @@ class ProductController extends Controller
     {
         $user = Auth::user();
         $product = Product::find($id);
+        if($product->rating == null) {
+            $product->rating = 0;
+        }
         if ($user->role->id == 2 && ($product->businessDetail->cooperative->id == $user->cooperative->id)) {
             return ResponseFormatter::success(new ProductResource($product), 'Products fetched successfully');
         } else {
