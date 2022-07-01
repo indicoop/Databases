@@ -34,6 +34,9 @@ class TransactionController extends Controller
 
     public function create(Request $request)
     {
+        $request->validate([
+            'voucher_id' => 'nullable',
+        ]);
         $user = $request->user();
         try {
             // delete all cart of user if there is any
