@@ -133,8 +133,7 @@ class CooperativeController extends Controller
                         $file_name = uniqid() . '.' . $profile_picture->getClientOriginalExtension();
                         $file_name_certificate = uniqid() . '.' . $certificate->getClientOriginalExtension();
                         $file_name_legal_entity_certificate = uniqid() . '.' . $legal_entity_certificate->getClientOriginalExtension();
-
-                        // move file to public/uploads/cooperative/profile_picture
+                        
                         $profile_picture->move(public_path('profile_picture'), $file_name);
                         $certificate->move(public_path('certificate'), $file_name_certificate);
                         $legal_entity_certificate->move(public_path('legal_entity_certificate'), $file_name_legal_entity_certificate);

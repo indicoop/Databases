@@ -31,7 +31,9 @@ class User extends Authenticatable
         'cooperative_id',
         'credit_card_number',
         'phone_number',
-        'address'
+        'address',
+        'profile_photo_path',
+        'is_verified',
     ];
 
     /**

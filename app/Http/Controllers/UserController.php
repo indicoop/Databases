@@ -24,9 +24,16 @@ class UserController extends Controller
                 'credit_card_number' => 'nullable|string',
                 'phone_number' => 'nullable|string',
                 'address' => 'required|string',
+                'profile_photo_path' => 'nullable',
             ]);
 
             // var_dump((int) $request->role_id);
+            if ($request->hasFile('profile_photo_path')) {
+                $profile_photo_path = $request->file('profile_photo_path');
+                $filename = uniqid() . '.' . $profile_photo_path->getClientOriginalExtension();
+                $profile_photo_path->move(public_path('profile_picture'), $filename);
+                $request->profile_photo_path = "/profile_picture/" . $filename;
+            }
 
             User::create([
                 'name' => $request->name,
@@ -37,6 +44,7 @@ class UserController extends Controller
                 'credit_card_number' => $request->credit_card_number,
                 'phone_number' => $request->phone_number,
                 'address' => $request->address,
+                'profile_photo_path' => $request->profile_photo_path,
             ]);
 
             $user = User::where('email', $request->email)->first();
@@ -45,9 +53,9 @@ class UserController extends Controller
 
             return ResponseFormatter::success([
                 'code' => 200,
-                'user' => $user,
                 'token-type' => 'Bearer',
                 'token' => $token,
+                'user' => $user,
             ]);
         } catch (Exception $e) {
             return ResponseFormatter::error($e->getMessage());
@@ -118,13 +126,29 @@ class UserController extends Controller
         try {
             $request->validate([
                 'name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255|unique:users',
+                'email' => 'required|string',
                 'cooperative_id' => 'nullable|integer',
-                'credit_card_number' => 'nullable|string',
                 'phone_number' => 'nullable|string',
                 'address' => 'required|string',
-                'profile_photo_path' => 'nullable|string',
+                'profile_photo_path' => 'nullable',
+                'credit_card_number' => 'nullable|string',
             ]);
+
+            if ($request->hasFile('profile_photo_path')) {
+                // delete old photo
+                $old_photo_path = User::where('id', $request->user()->id)->first();
+                if ($old_photo_path->profile_photo_path != null) {
+                    $old_photo_path = str_replace('/profile_photo_path/', '', $old_photo_path);
+                    unlink(public_path('profile_picture/' . $old_photo_path));
+                    $old_photo_path = $old_photo_path->profile_photo_path;
+                }
+
+                // upload new photo
+                $profile_photo_path = $request->file('profile_photo_path');
+                $filename = uniqid() . '.' . $profile_photo_path->getClientOriginalExtension();
+                $profile_photo_path->move(public_path('profile_picture'), $filename);
+                $request->profile_photo_path = "/profile_picture/" . $filename;
+            }
 
             $user = User::find($request->user()->id);
             $user->name = $request->name;
@@ -140,7 +164,6 @@ class UserController extends Controller
                 'code' => 200,
                 'user' => $user,
             ]);
-
         } catch (Exception $e) {
             return ResponseFormatter::error($e->getMessage());
         }

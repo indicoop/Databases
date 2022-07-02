@@ -36,6 +36,7 @@ class UserFactory extends Factory
             'credit_card_number' => '1234567890123456',
             'phone_number' => '09123456789',
             'address' => '123 Fake Street, Fake City, Fake State, 12345',
+            'profile_photo_path' => '/profile_pictures/user-image.jpeg',
         ];
     }
 

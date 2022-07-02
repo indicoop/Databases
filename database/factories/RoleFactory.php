@@ -17,7 +17,18 @@ class RoleFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->unique()->randomElement(['admin', 'cooperative_chairman', 'member', 'guest']),
+            'name' => $this->faker->unique()->randomElement(['admin', 'cooperative_chairman', 'member', 'guest', 'secretary', 'treasurer', 'vice_chairman']),
         ];
+
+        // Role::create([
+        //     ['name' => 'Admin'],
+        //     ['name' => 'Cooperative Chairman'],
+        //     ['name' => 'Member'],
+        //     ['name' => 'Guest'],
+        //     ['name' => 'Secretary'],
+        //     ['name' => 'Treasurer'],
+        //     ['name' => 'Vice'],
+        // ]);
+
     }
 }
